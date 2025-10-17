@@ -30,8 +30,8 @@ public class BaseEntity {
 //    @Column(name = "modifiedBy", length = 40, nullable = true, updatable = true)
 //    private String modifiedBy;
 
-    @LastModifiedDate
-    @Column(name = "updateTime", updatable = true)
-    @ColumnDefault("CURRENT_TIMESTAMP(6)")
-    private LocalDateTime updateTime;
+//    @LastModifiedDate
+//    @Column(name = "updateTime", updatable = true)
+//    @ColumnDefault("CURRENT_TIMESTAMP(6)")
+//    private LocalDateTime updateTime;
 }
