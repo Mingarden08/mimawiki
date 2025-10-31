@@ -8,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     // JWT SECRET KEY (32바이트 이상)
-    private static final String SECRET_KEY = "3f1mA+P8Bfhq2B4h2QhL0K3aR9S5tVbA8JZx+8YQ+qU=";
+    @Value("secret_key")
+    private String SECRET_KEY;
 
     public AuthService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
         this.memberRepository = memberRepository;

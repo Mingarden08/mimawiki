@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/members")
+@RequestMapping("/api/mima.wiki/members")
 @Slf4j
 public class MemberController {
 

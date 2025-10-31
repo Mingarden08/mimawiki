@@ -3,6 +3,7 @@ package com.mimawiki.api.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -25,6 +26,11 @@ public class BaseEntity {
     @Column(name = "regTime", updatable = false)
     @ColumnDefault("CURRENT_TIMESTAMP(6)")
     private LocalDateTime regTime;
+
+    @PrePersist
+    public void prePersist() {
+        this.regTime = LocalDateTime.now();
+    }
 
 //    @LastModifiedBy
 //    @Column(name = "modifiedBy", length = 40, nullable = true, updatable = true)

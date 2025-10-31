@@ -33,10 +33,6 @@ public class Member extends BaseEntity {
     @Schema(description = "비빌번호")
     private String passwd;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role = Role.USER;
-
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Profile profile;
 

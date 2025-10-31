@@ -3,13 +3,15 @@ package com.mimawiki.api.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = "3f1mA+P8Bfhq2B4h2QhL0K3aR9S5tVbA8JZx+8YQ+qU="; // 🔑 비밀 키
+    @Value("secret_key")
+    private String SECRET_KEY; // 🔑 비밀 키
 
     // JWT 생성 (토큰 발급)
     public String generateToken(String username) {

@@ -4,6 +4,7 @@ import com.mimawiki.api.filter.JwtFilter;
 import com.mimawiki.api.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,7 +27,7 @@ import java.util.Collections;
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true) //API 권한 확인 로직 추가, 우선 보안 모두 풀었음
 public class SecurityConfig {
 
-//    @Autowired
+    //    @Autowired
     private final JwtUtil jwtUtil;
 
     private final CustomUserDetailsService userDetailsService;
@@ -52,6 +53,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // ✅ 변경된 방식
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 허용
                         .requestMatchers(
                                 "/api/members/signup",
                                 "/api/naver/book",
@@ -60,7 +62,9 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
                                 "/webjars/**",
-                                "/api/auth/**"
+                                "/api/auth/**",
+                                "/api/**",
+                                "/mima.wiki/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -78,9 +82,9 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(Arrays.asList("*",
+                "http://localhost:5173",
                 "http://3.38.185.232:8080",
-                "http://3.38.185.232:8081",
-                "http://localhost:3000"));
+                "http://3.38.185.232:8081"));
         //configuration.addAllowedHeader("*");
         //configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedOriginPatterns(Collections.singletonList("*")); // 모든 도메인 허용

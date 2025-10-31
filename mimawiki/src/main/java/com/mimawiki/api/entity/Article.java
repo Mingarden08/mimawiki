@@ -28,8 +28,14 @@ public class Article extends BaseEntity {
     @Column(nullable = false, unique = true, length = 200)
     private String keyword;
 
+    // 원본 마크다운
     @Lob
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    private String markdown;
+
+    // 마크다운 -> HTML 변환 결과
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;
 
     @Column(nullable = false)
@@ -40,12 +46,8 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "author_id", nullable = false)
     private Member author;
 
-    @CreatedBy
-    @Column(name = "createdBy", length = 40, nullable = true, updatable = false)
-    private Long createdBy;
-
     @LastModifiedBy
-    @Column(name = "modifiedBy", length = 40, nullable = true, updatable = true)
+    @Column(name = "modifiedBy", length = 40)
     private String modifiedBy;
 
     @LastModifiedDate
@@ -53,12 +55,10 @@ public class Article extends BaseEntity {
     @ColumnDefault("CURRENT_TIMESTAMP(6)")
     private LocalDateTime updateTime;
 
-    // 이 글에 달린 좋아요 목록
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<ArticleLike> likes = new ArrayList<>();
 
-    // 조회수 증가
     public void increaseViewCount() {
         this.viewCount++;
     }
