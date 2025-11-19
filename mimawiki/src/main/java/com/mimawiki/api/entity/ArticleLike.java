@@ -2,15 +2,17 @@ package com.mimawiki.api.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "article_likes")
+// ✅ 추가: unique 제약조건
+@Table(name = "article_likes",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_article_member",
+                        columnNames = {"article_id", "member_id"}
+                )
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor

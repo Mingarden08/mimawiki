@@ -44,19 +44,22 @@ public class MemberService {
      * @param dto
      * @return
      */
+    // MemberService.java의 signup 수정
     public boolean signup(MemberSignupRequestDto dto) {
         Optional<Member> memberOptional = memberRepository.findByEmail(dto.getEmail());
-        //이메일 중복체크
         if (memberOptional.isPresent()) {
             throw new IllegalStateException("이미 존재하는 이메일입니다.");
         }
 
-        // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(dto.getPasswd());
-        dto.setPasswd(encodedPassword);
 
-        Member member = dto.toEntity();
-        log.info("member: {}", member.getName());
+        Member member = Member.builder()
+                .email(dto.getEmail())
+                .name(dto.getName())
+                .passwd(encodedPassword)
+                .role(Member.Role.USER) // 무조건 USER로 설정
+                .build();
+
         memberRepository.save(member);
         return true;
     }

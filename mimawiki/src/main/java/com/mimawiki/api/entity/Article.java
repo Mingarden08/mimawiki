@@ -3,12 +3,8 @@ package com.mimawiki.api.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -28,12 +24,10 @@ public class Article extends BaseEntity {
     @Column(nullable = false, unique = true, length = 200)
     private String keyword;
 
-    // 원본 마크다운
     @Lob
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String markdown;
 
-    // 마크다운 -> HTML 변환 결과
     @Lob
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;
@@ -41,6 +35,11 @@ public class Article extends BaseEntity {
     @Column(nullable = false)
     @Builder.Default
     private Integer viewCount = 0;
+
+    // ✅ 추가: 좋아요 개수 캐싱
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer likeCount = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
@@ -61,5 +60,15 @@ public class Article extends BaseEntity {
 
     public void increaseViewCount() {
         this.viewCount++;
+    }
+
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
     }
 }
