@@ -24,7 +24,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     // JWT SECRET KEY (32바이트 이상)
-    @Value("secret_key")
+    @Value("${secret_key}")
     private String SECRET_KEY;
 
     public AuthService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
