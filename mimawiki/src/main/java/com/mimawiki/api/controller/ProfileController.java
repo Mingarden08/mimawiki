@@ -63,7 +63,7 @@ public class ProfileController {
 
         Long memberId = getMemberIdFromAuth(authentication);
         profileService.updateProfile(memberId, req);
-z
+
         return ResponseEntity.ok(DataResponse.of(ResponseCode.SUCCESS));
     }
 

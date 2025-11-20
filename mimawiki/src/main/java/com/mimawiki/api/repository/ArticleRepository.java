@@ -36,4 +36,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     // ✅ [추가] 특정 회원이 작성한 글 목록 (페이징)
     Page<Article> findByAuthor(Member author, Pageable pageable);
+
+
 }
