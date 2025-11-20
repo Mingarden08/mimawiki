@@ -2,17 +2,16 @@ package com.mimawiki.api.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import java.util.*;
+import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "MEMBER")
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class Member extends BaseEntity {
 
@@ -22,39 +21,36 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Column(name = "email", updatable = false, length = 50, nullable = false, unique = true)
-    @Schema(description = "회원 이메일")
     private String email;
 
     @Column(name = "name", length = 25, nullable = false)
-    @Schema(description = "회원이름")
     private String name;
 
     @Column(name = "passwd", length = 100, nullable = false)
-    @Schema(description = "비밀번호")
     private String passwd;
 
-    // ✅ 추가: 권한 필드
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private Role role = Role.USER;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Profile profile;
-
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    // ✅ [수정 1] 작성한 글 목록 매핑 (Member : Article = 1 : N)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Article> articles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<ArticleLike> likes = new ArrayList<>();
+    // ✅ [수정 2] Profile 매핑 (Member : Profile = 1 : 1)
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Profile profile;
+
+    // ✅ [수정 3] 이름 수정 비즈니스 로직
+    public void updateName(String newName) {
+        if (newName != null && !newName.isBlank()) {
+            this.name = newName;
+        }
+    }
 
     public enum Role {
         USER, ADMIN
-    }
-
-    public Member() {
-
     }
 }

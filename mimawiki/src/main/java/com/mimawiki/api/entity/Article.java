@@ -36,7 +36,6 @@ public class Article extends BaseEntity {
     @Builder.Default
     private Integer viewCount = 0;
 
-    // ✅ 추가: 좋아요 개수 캐싱
     @Column(nullable = false)
     @Builder.Default
     private Integer likeCount = 0;
@@ -58,6 +57,15 @@ public class Article extends BaseEntity {
     @Builder.Default
     private List<ArticleLike> likes = new ArrayList<>();
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "article_tags",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    @Builder.Default
+    private Set<Tag> tags = new HashSet<>();
+
     public void increaseViewCount() {
         this.viewCount++;
     }
@@ -70,5 +78,15 @@ public class Article extends BaseEntity {
         if (this.likeCount > 0) {
             this.likeCount--;
         }
+    }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+        tag.getArticles().add(this);
+    }
+
+    public void removeTag(Tag tag) {
+        this.tags.remove(tag);
+        tag.getArticles().remove(this);
     }
 }

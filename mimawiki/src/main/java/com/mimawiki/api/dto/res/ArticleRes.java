@@ -1,9 +1,12 @@
 package com.mimawiki.api.dto.res;
 
 import com.mimawiki.api.entity.Article;
+import com.mimawiki.api.entity.Tag;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -17,6 +20,7 @@ public class ArticleRes {
     private Integer likeCount;
     private LocalDateTime regTime;
     private LocalDateTime updateTime;
+    private List<String> tags;
 
     public static ArticleRes fromEntity(Article article) {
         return ArticleRes.builder()
@@ -29,6 +33,9 @@ public class ArticleRes {
                 .likeCount(article.getLikes() != null ? article.getLikes().size() : 0)
                 .regTime(article.getRegTime())
                 .updateTime(article.getUpdateTime())
+                .tags(article.getTags().stream()
+                        .map(Tag::getName)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }
