@@ -42,10 +42,6 @@ public class ArticleService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        // keyword 중복 체크
-        if (articleRepository.findByKeyword(dto.getKeyword()).isPresent()) {
-            throw new IllegalStateException("이미 존재하는 키워드입니다.");
-        }
 
         // ✅ [추가] 태그 문자열 리스트 -> Tag 엔티티 Set으로 변환
         Set<Tag> tags = processTags(dto.getTags());
