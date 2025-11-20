@@ -223,6 +223,19 @@ public class ArticleController {
         }
     }
 
+    /**
+     * 전체 게시글 목록 조회
+     * GET /api/mima.wiki/article?page=0
+     */
+    @Operation(summary = "전체 게시글 조회", description = "모든 게시글을 페이징하여 조회합니다.")
+    @GetMapping("/article")
+    public ResponseEntity<Page<ArticleRes>> getAllArticles(
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        Page<ArticleRes> response = articleService.getAllArticles(pageable);
+        return ResponseEntity.ok(response);
+    }
+
     // ============================================================
     // Private Helper Methods
     // ============================================================

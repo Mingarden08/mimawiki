@@ -217,4 +217,16 @@ public class ArticleService {
         // Page 객체의 map 메서드를 사용하면 내부의 Article 리스트를 하나씩 ArticleRes로 바꿔줍니다.
         return articles.map(ArticleRes::fromEntity);
     }
+
+    /**
+     * 전체 게시글 조회 (페이징)
+     * GET /api/mima.wiki/article?page=0
+     */
+    public Page<ArticleRes> getAllArticles(Pageable pageable) {
+        // JPA 기본 제공 findAll 메서드 사용
+        Page<Article> articles = articleRepository.findAll(pageable);
+
+        // Entity -> DTO 변환
+        return articles.map(ArticleRes::fromEntity);
+    }
 }
